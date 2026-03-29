@@ -16,16 +16,14 @@ export default function Index() {
       <Navbar />
       <main>
         <Hero3D />
-        <FeaturesSection />
+        <AboutSection />
+        <TestimonialsSection />
         <section id="technology">
           <TechnologySection />
         </section>
         <ApplicationsTimeline />
-        <AboutSection />
-        <section id="safety">
-          <SafetySection />
-        </section>
-        <TestimonialsSection />
+        <SafetySection />
+        <FeaturesSection />
         <section id="faq">
           <FAQSection />
         </section>

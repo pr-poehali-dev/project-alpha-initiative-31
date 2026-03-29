@@ -1,42 +1,43 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import Icon from "@/components/ui/icon"
 
 const features = [
   {
-    title: "Адаптивная нейрообработка",
-    description: "Самооптимизирующиеся алгоритмы, которые обучаются на нейронных паттернах и улучшают интерпретацию сигналов.",
-    icon: "brain",
-    badge: "ИИ",
+    icon: "Projector",
+    badge: "Шоу",
+    title: "Живая встреча с жирафами",
+    description: "Световое шоу с 3D-проекциями, от которых шея вытягивается сама.",
   },
   {
-    title: "Медицинская защита",
-    description: "Шифрование по стандартам FDA со сквозной защитой конфиденциальных нейронных данных.",
-    icon: "lock",
-    badge: "Сертификат",
+    icon: "Drama",
+    badge: "Сюрприз",
+    title: "Персонажи Лапенко на сцене",
+    description: "Никто не знает, кто выйдет в этот раз.",
   },
   {
-    title: "Интуитивное управление",
-    description: "Естественная трансляция мыслей в действия с откликом менее миллисекунды и точностью 99,7%.",
-    icon: "globe",
-    badge: "Точность",
+    icon: "Volume2",
+    badge: "Звук",
+    title: "Звук, который выворачивает наизнанку",
+    description: "Система trAcoustics, проверенная на космических кораблях.",
   },
   {
-    title: "Предиктивная калибровка",
-    description: "ML-модели, которые предугадывают намерения пользователя и оптимизируют нейронные пути.",
-    icon: "zap",
-    badge: "Умный",
+    icon: "Gift",
+    badge: "Первым 50",
+    title: "Постер с автографом",
+    description: "Постер с автографом Антона Лапенко (некоторые буквы точно настоящие).",
   },
   {
-    title: "Биометрическая интеграция",
-    description: "Бесшовная синхронизация с мониторингом жизненных показателей для контроля здоровья.",
-    icon: "link",
-    badge: "Связь",
+    icon: "Footprints",
+    badge: "Хардкор",
+    title: "Никаких «сидячих мест»",
+    description: "Только стоя, только хардкор.",
   },
   {
-    title: "Поддержка XR",
-    description: "Нативная совместимость с AR/VR-средами для терапевтических и рабочих приложений.",
-    icon: "target",
-    badge: "XR Ready",
+    icon: "Star",
+    badge: "Легенда",
+    title: "Ты был там, когда тишина сдохла",
+    description: "«Я был там, когда тишина сдохла» — скажете вы своим внукам.",
   },
 ]
 
@@ -45,10 +46,9 @@ export function FeaturesSection() {
     <section className="py-24 px-6 bg-background">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-foreground mb-4 font-sans">Возможности нового поколения</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            Почувствуйте будущее с технологиями, которые переопределяют возможное
-          </p>
+          <h2 className="font-orbitron text-3xl md:text-4xl xl:text-5xl font-extrabold text-foreground uppercase mb-4">
+            6 ПРИЧИН ПОТЕРЯТЬ ОСТАТКИ <span className="text-red-500">ЗДРАВОГО СМЫСЛА</span> НА ЭТИХ КОНЦЕРТАХ
+          </h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -60,22 +60,15 @@ export function FeaturesSection() {
             >
               <CardHeader>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-3xl">
-                    {feature.icon === "brain" && "&#129504;"}
-                    {feature.icon === "lock" && "&#128274;"}
-                    {feature.icon === "globe" && "&#127760;"}
-                    {feature.icon === "zap" && "&#9889;"}
-                    {feature.icon === "link" && "&#128279;"}
-                    {feature.icon === "target" && "&#127919;"}
-                  </span>
+                  <Icon name={feature.icon as "Projector"} size={30} className="text-red-500" />
                   <Badge variant="secondary" className="bg-accent text-accent-foreground">
                     {feature.badge}
                   </Badge>
                 </div>
-                <CardTitle className="text-xl font-bold text-card-foreground">{feature.title}</CardTitle>
+                <CardTitle className="text-xl font-bold text-card-foreground font-orbitron">{feature.title}</CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-muted-foreground leading-relaxed">
+                <CardDescription className="text-muted-foreground leading-relaxed font-space-mono">
                   {feature.description}
                 </CardDescription>
               </CardContent>

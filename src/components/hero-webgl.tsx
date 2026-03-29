@@ -2,6 +2,7 @@ import { Canvas, extend, useFrame } from "@react-three/fiber"
 import { useAspect, useTexture } from "@react-three/drei"
 import { useMemo, useRef, useState, useEffect } from "react"
 import * as THREE from "three"
+import { Button } from "@/components/ui/button"
 
 const TEXTUREMAP = { src: "https://i.postimg.cc/XYwvXN8D/img-4.png" }
 const DEPTHMAP = { src: "https://i.postimg.cc/2SHKQh2q/raw-4.webp" }
@@ -32,7 +33,6 @@ const Scene = () => {
       uniform float uTime;
       varying vec2 vUv;
 
-      // Simple noise function
       float random(vec2 st) {
         return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
       }
@@ -50,34 +50,20 @@ const Scene = () => {
 
       void main() {
         vec2 uv = vUv;
-
-        // Depth-based displacement
         float depth = texture2D(uDepthMap, uv).r;
         vec2 displacement = depth * uPointer * 0.01;
         vec2 distortedUv = uv + displacement;
-
-        // Base texture
         vec4 baseColor = texture2D(uTexture, distortedUv);
-
-        // Create scanning effect
         float aspect = ${WIDTH}.0 / ${HEIGHT}.0;
         vec2 tUv = vec2(uv.x * aspect, uv.y);
         vec2 tiling = vec2(120.0);
         vec2 tiledUv = mod(tUv * tiling, 2.0) - 1.0;
-
         float brightness = noise(tUv * tiling * 0.5);
         float dist = length(tiledUv);
         float dot = smoothstep(0.5, 0.49, dist) * brightness;
-
-        // Flow effect based on progress
         float flow = 1.0 - smoothstep(0.0, 0.02, abs(depth - uProgress));
-
-        // Red scanning overlay
         vec3 mask = vec3(dot * flow * 10.0, 0.0, 0.0);
-
-        // Combine effects
         vec3 final = baseColor.rgb + mask;
-
         gl_FragColor = vec4(final, 1.0);
       }
     `
@@ -114,76 +100,81 @@ const Scene = () => {
 }
 
 export const Hero3DWebGL = () => {
-  const titleWords = "Synapse AI".split(" ")
-  const subtitle = "Нейроинтерфейсы нового поколения."
-  const [visibleWords, setVisibleWords] = useState(0)
   const [subtitleVisible, setSubtitleVisible] = useState(false)
-  const [delays, setDelays] = useState<number[]>([])
-  const [subtitleDelay, setSubtitleDelay] = useState(0)
+  const [ctaVisible, setCtaVisible] = useState(false)
 
   useEffect(() => {
-    setDelays(titleWords.map(() => Math.random() * 0.07))
-    setSubtitleDelay(Math.random() * 0.1)
-  }, [titleWords.length])
-
-  useEffect(() => {
-    if (visibleWords < titleWords.length) {
-      const timeout = setTimeout(() => setVisibleWords(visibleWords + 1), 600)
-      return () => clearTimeout(timeout)
-    } else {
-      const timeout = setTimeout(() => setSubtitleVisible(true), 800)
-      return () => clearTimeout(timeout)
-    }
-  }, [visibleWords, titleWords.length])
+    const t1 = setTimeout(() => setSubtitleVisible(true), 1200)
+    const t2 = setTimeout(() => setCtaVisible(true), 2000)
+    return () => { clearTimeout(t1); clearTimeout(t2) }
+  }, [])
 
   return (
-    <div className="h-screen bg-black relative overflow-hidden">
+    <div id="tour" className="min-h-screen bg-black relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none z-10">
         <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-black to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-black to-transparent" />
         <div className="absolute top-0 bottom-0 left-0 w-32 bg-gradient-to-r from-black to-transparent" />
         <div className="absolute top-0 bottom-0 right-0 w-32 bg-gradient-to-l from-black to-transparent" />
       </div>
 
-      <div className="h-screen uppercase items-center w-full absolute z-[60] pointer-events-none px-10 flex justify-center flex-col">
-        <div className="text-3xl md:text-5xl xl:text-6xl 2xl:text-7xl font-extrabold font-orbitron">
-          <div className="flex space-x-2 lg:space-x-6 overflow-hidden text-white">
-            {titleWords.map((word, index) => (
-              <div
-                key={index}
-                className={index < visibleWords ? "fade-in" : ""}
-                style={{
-                  animationDelay: `${index * 0.13 + (delays[index] || 0)}s`,
-                  opacity: index < visibleWords ? undefined : 0,
-                }}
-              >
-                {word}
-              </div>
-            ))}
+      <div className="absolute inset-0 z-[60] pointer-events-none flex items-center justify-center px-6 md:px-10">
+        <div className="text-center max-w-5xl mx-auto">
+          <div className="fade-in mb-6">
+            <p className="font-orbitron text-red-500 text-xs md:text-sm tracking-[0.3em] uppercase mb-4">
+              Тур в честь 36-летия
+            </p>
+            <h1 className="font-orbitron text-2xl md:text-4xl xl:text-5xl 2xl:text-6xl font-extrabold text-white leading-tight uppercase">
+              НУ ЧЕ, НАХРЕН!{" "}
+              <span className="text-red-500">С ТРЕСКОМ РАЗРЫВАЕМ</span>{" "}
+              ГНИЛОЙ МЕШОК ТИШИНЫ И ВЫТРЯХИВАЕМ ИЗ НЕГО НОВОСТЬ, КОТОРАЯ ЗАСТАВИТ ВАШИ ГЛАЗЁНКИ УСОМНИТЬСЯ В
+              РЕАЛЬНОСТИ ПРОИСХОДЯЩЕГО 🤟🏻
+            </h1>
           </div>
-        </div>
-        <div className="text-xs md:text-xl xl:text-2xl 2xl:text-3xl mt-2 overflow-hidden text-white font-bold max-w-4xl mx-auto text-center px-4">
+
           <div
             className={subtitleVisible ? "fade-in-subtitle" : ""}
-            style={{
-              animationDelay: `${titleWords.length * 0.13 + 0.2 + subtitleDelay}s`,
-              opacity: subtitleVisible ? undefined : 0,
-            }}
+            style={{ opacity: subtitleVisible ? undefined : 0 }}
           >
-            {subtitle}
+            <p className="font-geist text-gray-300 text-base md:text-xl mb-4 leading-relaxed max-w-3xl mx-auto">
+              В честь 36-летия величайшего альбома «Электрические жирафы» группа «Багровый Фантомас» отправляется
+              в грандиозное турне из двух городов:
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-4">
+              <div className="bg-red-500/10 border border-red-500/40 rounded px-4 py-2 text-white font-orbitron text-sm md:text-base">
+                12 ДЕКАБРЯ — САНКТ-ПЕТЕРБУРГ<br />
+                <span className="text-red-400 text-xs">клуб «Время N»</span>
+              </div>
+              <div className="bg-red-500/10 border border-red-500/40 rounded px-4 py-2 text-white font-orbitron text-sm md:text-base">
+                13 ДЕКАБРЯ — МОСКВА<br />
+                <span className="text-red-400 text-xs">клуб «Агломерат»</span>
+              </div>
+            </div>
+            <p className="text-gray-400 font-space-mono text-sm mb-6">
+              Специальный гость: группа «Велюр»
+            </p>
+          </div>
+
+          <div
+            className={ctaVisible ? "fade-in-subtitle pointer-events-auto" : "pointer-events-auto"}
+            style={{ opacity: ctaVisible ? undefined : 0 }}
+          >
+            <Button
+              size="lg"
+              className="bg-red-500 hover:bg-red-600 text-white font-orbitron text-lg px-10 py-6 pulse-button border-0"
+              onClick={() => document.querySelector('#tickets')?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              ВЗОРВАТЬ КАССУ / КУПИТЬ БИЛЕТ
+            </Button>
           </div>
         </div>
       </div>
 
       <Canvas
         flat
-        gl={{
-          antialias: true,
-          alpha: false,
-          powerPreference: "high-performance",
-        }}
+        gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
         camera={{ position: [0, 0, 1] }}
-        style={{ background: "#000000" }}
+        style={{ background: "#000000", height: "100vh" }}
       >
         <Scene />
       </Canvas>
